@@ -1,9 +1,12 @@
 Container = new Mongo.Collection("Container");
 subContainer = new Mongo.Collection("subContainer");
+
 Items = new Mongo.Collection("Items");
 
 if (Meteor.isClient) {
-    // counter starts at 0
+    ItemsThroughSecondLevelPublish = new Mongo.Collection("ItemsThroughSecondLevelPublish");
+    ItemsThroughThirdLevelPublish = new Mongo.Collection("ItemsThroughThirdLevelPublish");
+
     Meteor.subscribe("items");
     Session.set('counter', 0);
 
@@ -12,7 +15,10 @@ if (Meteor.isClient) {
             return Session.get('counter');
         },
         items: function () {
-            return Items.find();
+            return {
+                ItemsThroughSecondLevelPublish: ItemsThroughSecondLevelPublish.find(),
+                ItemsThroughThirdLevelPublish: ItemsThroughThirdLevelPublish.find()
+            };
         },
         container: function () {
             return Container.findOne();
@@ -48,22 +54,29 @@ if (Meteor.isServer) {
             find: function () {
                 return Container.find();
             },
-            children:[
+            children: [
                 {
-                    find:function(container)
-                    {
+                    find: function (container) {
                         return subContainer.find();
                     },
-                    children:[
+                    children: [
                         {
-                            find:function(subcontainer,container)
-                            {
-                                var item_ids=container.item_ids||[];
-                                console.log("item_ids.length",item_ids.length);
-                                return Items.find({_id:{$in:item_ids}});
+                            collectionName: "ItemsThroughThirdLevelPublish",
+                            find: function (subcontainer, container) {
+                                var item_ids = container.item_ids || [];
+                                console.log("item_ids.length", item_ids.length);
+                                return Items.find({_id: {$in: item_ids}});
                             }
                         }
                     ]
+                },
+                {
+                    collectionName: "ItemsThroughSecondLevelPublish",
+                    find: function (container) {
+                        var item_ids = container.item_ids || [];
+                        console.log("item_ids.length", item_ids.length);
+                        return Items.find({_id: {$in: item_ids}});
+                    }
                 }
             ]
         };

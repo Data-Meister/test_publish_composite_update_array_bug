@@ -1,16 +1,20 @@
 <head>
-  <title>test_publish_composite_update_array_bug</title>
+    <title>test_publish_composite_update_array_bug</title>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
+<h1>Welcome to Meteor!</h1>
 
-  {{> hello}}
+{{> hello}}
 </body>
 
 <template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-    <p>Items on client : {{items.count}}.</p>
+    <button>Click Me</button>
+    <p>You've pressed the button {{counter}} times.</p>
+    {{#let i=items}}
+        <p>ItemsThroughSecondLevelPublish return {{i.ItemsThroughSecondLevelPublish.count}} items</p>
+
+        <p>ItemsThroughThirdLevelPublish return {{i.ItemsThroughThirdLevelPublish.count}} items</p>
+    {{/let}}
     <p>Number of ids in container.item_ids : {{container.item_ids.length}}.</p>
 </template>
