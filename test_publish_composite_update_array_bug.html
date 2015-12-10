@@ -1,0 +1,16 @@
+<head>
+  <title>test_publish_composite_update_array_bug</title>
+</head>
+
+<body>
+  <h1>Welcome to Meteor!</h1>
+
+  {{> hello}}
+</body>
+
+<template name="hello">
+  <button>Click Me</button>
+  <p>You've pressed the button {{counter}} times.</p>
+    <p>Items on client : {{items.count}}.</p>
+    <p>Number of ids in container.item_ids : {{container.item_ids.length}}.</p>
+</template>
