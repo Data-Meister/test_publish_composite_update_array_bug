@@ -98,6 +98,7 @@ Publication.prototype._republishChildrenOf = function _republishChildrenOf(doc) 
         // So we skip this to avoid creating a duplicate of the first argument.
         if ( parentArgs.length == publication.args.length ){
             newArgs = parentArgs.slice(1);
+            console.log("used the hack");
         }
         else {
             newArgs = parentArgs;
@@ -105,7 +106,7 @@ Publication.prototype._republishChildrenOf = function _republishChildrenOf(doc) 
 
         // Subsequent args are passed down from parent.
         // These may have been updated by a grandparent publication.
-        newArgs.forEach(function (arg, i) {
+        parentArgs.forEach(function (arg, i) {
             publication.args[i+1] = arg;
         });
 
